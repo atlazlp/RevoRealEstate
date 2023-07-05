@@ -33,10 +33,10 @@ public class REListener implements Listener
 	@EventHandler
 	public void onSignChange(SignChangeEvent event)
 	{
-		if(RealEstate.instance.config.cfgSellKeywords.contains(event.getLine(0).toLowerCase()) || 
-				RealEstate.instance.config.cfgLeaseKeywords.contains(event.getLine(0).toLowerCase()) || 
-				RealEstate.instance.config.cfgRentKeywords.contains(event.getLine(0).toLowerCase()) || 
-				RealEstate.instance.config.cfgContainerRentKeywords.contains(event.getLine(0).toLowerCase()))
+		if(RealEstate.instance.config.cfgSellKeywords.contains(event.getSide(0).getLine(0).toLowerCase()) || 
+				RealEstate.instance.config.cfgLeaseKeywords.contains(event.getSide(0).getLine(0).toLowerCase()) || 
+				RealEstate.instance.config.cfgRentKeywords.contains(event.getSide(0).getLine(0).toLowerCase()) || 
+				RealEstate.instance.config.cfgContainerRentKeywords.contains(event.getSide(0).getLine(0).toLowerCase()))
 		{
 			Player player = event.getPlayer();
 			Location loc = event.getBlock().getLocation();
@@ -75,7 +75,7 @@ public class REListener implements Listener
 			}
 
 			// empty is considered a wish to sell
-			if(RealEstate.instance.config.cfgSellKeywords.contains(event.getLine(0).toLowerCase()))
+			if(RealEstate.instance.config.cfgSellKeywords.contains(event.getSide(0).getLine(0).toLowerCase()))
 			{
 				if(!RealEstate.instance.config.cfgEnableSell)
 				{
@@ -104,21 +104,21 @@ public class REListener implements Listener
 				}
 				catch (NumberFormatException e)
 				{
-					Messages.sendMessage(player, RealEstate.instance.messages.msgErrorInvalidNumber, event.getLine(1));
+					Messages.sendMessage(player, RealEstate.instance.messages.msgErrorInvalidNumber, event.getSide(0).getLine(1));
 					event.setCancelled(true);
 					event.getBlock().breakNaturally();
 					return;
 				}
 				if(price <= 0)
 				{
-					Messages.sendMessage(player, RealEstate.instance.messages.msgErrorNegativePrice, event.getLine(1));
+					Messages.sendMessage(player, RealEstate.instance.messages.msgErrorNegativePrice, event.getSide(0).getLine(1));
 					event.setCancelled(true);
 					event.getBlock().breakNaturally();
 					return;
 				}
 				if((price%1)!=0 && !RealEstate.instance.config.cfgUseDecimalCurrency) //if the price has a decimal number AND Decimal currency is disabled
 				{
-					Messages.sendMessage(player, RealEstate.instance.messages.msgErrorNonIntegerPrice, event.getLine(1));
+					Messages.sendMessage(player, RealEstate.instance.messages.msgErrorNonIntegerPrice, event.getSide(0).getLine(1));
 					event.setCancelled(true);
 					event.getBlock().breakNaturally();
 					return;
@@ -146,8 +146,8 @@ public class REListener implements Listener
 				event.setCancelled(true);// need to cancel the event, so we can update the sign elsewhere
 				RealEstate.transactionsStore.sell(claim, claim.isAdminClaim() ? null : player, price, event.getBlock().getLocation());
 			}
-			else if(RealEstate.instance.config.cfgRentKeywords.contains(event.getLine(0).toLowerCase()) ||
-					RealEstate.instance.config.cfgContainerRentKeywords.contains(event.getLine(0).toLowerCase()))// we want to rent it
+			else if(RealEstate.instance.config.cfgRentKeywords.contains(event.getSide(0).getLine(0).toLowerCase()) ||
+					RealEstate.instance.config.cfgContainerRentKeywords.contains(event.getSide(0).getLine(0).toLowerCase()))// we want to rent it
 			{
 				if(!RealEstate.instance.config.cfgEnableRent)
 				{
@@ -175,34 +175,34 @@ public class REListener implements Listener
 				}
 				catch (NumberFormatException e)
 				{
-					Messages.sendMessage(player, RealEstate.instance.messages.msgErrorInvalidNumber, event.getLine(1));
+					Messages.sendMessage(player, RealEstate.instance.messages.msgErrorInvalidNumber, event.getSide(0).getLine(1));
 					event.setCancelled(true);
 					event.getBlock().breakNaturally();
 					return;
 				}
 				if(price <= 0)
 				{
-					Messages.sendMessage(player, RealEstate.instance.messages.msgErrorNegativePrice, event.getLine(1));
+					Messages.sendMessage(player, RealEstate.instance.messages.msgErrorNegativePrice, event.getSide(0).getLine(1));
 					event.setCancelled(true);
 					event.getBlock().breakNaturally();
 					return;
 				}
 				if((price%1)!=0 && !RealEstate.instance.config.cfgUseDecimalCurrency) //if the price has a decimal number AND Decimal currency is disabled
 				{
-					Messages.sendMessage(player, RealEstate.instance.messages.msgErrorNonIntegerPrice, event.getLine(1));
+					Messages.sendMessage(player, RealEstate.instance.messages.msgErrorNonIntegerPrice, event.getSide(0).getLine(1));
 					event.setCancelled(true);
 					event.getBlock().breakNaturally();
 					return;
 				}
 
-				if(event.getLine(2).isEmpty())
+				if(event.getSide(0).getLine(2).isEmpty())
 				{
-					event.setLine(2, RealEstate.instance.config.cfgRentTime);
+					event.getSide(0).setLine(2, RealEstate.instance.config.cfgRentTime);
 				}
-				int duration = parseDuration(event.getLine(2));
+				int duration = parseDuration(event.getSide(0).getLine(2));
 				if(duration == 0)
 				{
-					Messages.sendMessage(player, RealEstate.instance.messages.msgErrorInvalidDuration, event.getLine(2),
+					Messages.sendMessage(player, RealEstate.instance.messages.msgErrorInvalidDuration, event.getSide(0).getLine(2),
 						"10 weeks",
 						"3 days",
 						"1 week 3 days");
@@ -213,24 +213,24 @@ public class REListener implements Listener
 				int rentPeriods = 1;
 				if(RealEstate.instance.config.cfgEnableRentPeriod)
 				{
-					if(event.getLine(3).isEmpty())
+					if(event.getSide(0).getLine(3).isEmpty())
 					{
-						event.setLine(3, "1");
+						event.getSide(0).setLine(3, "1");
 					}
 					try
 					{
-						rentPeriods = Integer.parseInt(event.getLine(3));
+						rentPeriods = Integer.parseInt(event.getSide(0).getLine(3));
 					}
 					catch (NumberFormatException e)
 					{
-						Messages.sendMessage(player, RealEstate.instance.messages.msgErrorInvalidNumber, event.getLine(3));
+						Messages.sendMessage(player, RealEstate.instance.messages.msgErrorInvalidNumber, event.getSide(0).getLine(3));
 						event.setCancelled(true);
 						event.getBlock().breakNaturally();
 						return;
 					}
 					if(rentPeriods <= 0)
 					{
-						Messages.sendMessage(player, RealEstate.instance.messages.msgErrorNegativeNumber, event.getLine(3));
+						Messages.sendMessage(player, RealEstate.instance.messages.msgErrorNegativeNumber, event.getSide(0).getLine(3));
 						event.setCancelled(true);
 						event.getBlock().breakNaturally();
 						return;
@@ -258,9 +258,9 @@ public class REListener implements Listener
 				// all should be good, we can create the rent
 				event.setCancelled(true);
 				RealEstate.transactionsStore.rent(claim, player, price, event.getBlock().getLocation(), duration, rentPeriods,
-						RealEstate.instance.config.cfgRentKeywords.contains(event.getLine(0).toLowerCase()));
+						RealEstate.instance.config.cfgRentKeywords.contains(event.getSide(0).getLine(0).toLowerCase()));
 			}
-			else if(RealEstate.instance.config.cfgLeaseKeywords.contains(event.getLine(0).toLowerCase()))// we want to rent it
+			else if(RealEstate.instance.config.cfgLeaseKeywords.contains(event.getSide(0).getLine(0).toLowerCase()))// we want to rent it
 			{
 				if(!RealEstate.instance.config.cfgEnableLease)
 				{
@@ -289,51 +289,51 @@ public class REListener implements Listener
 				}
 				catch (NumberFormatException e)
 				{
-					Messages.sendMessage(player, RealEstate.instance.messages.msgErrorInvalidNumber, event.getLine(1));
+					Messages.sendMessage(player, RealEstate.instance.messages.msgErrorInvalidNumber, event.getSide(0).getLine(1));
 					event.setCancelled(true);
 					event.getBlock().breakNaturally();
 					return;
 				}
 				if(price <= 0)
 				{
-					Messages.sendMessage(player, RealEstate.instance.messages.msgErrorNegativePrice, event.getLine(1));
+					Messages.sendMessage(player, RealEstate.instance.messages.msgErrorNegativePrice, event.getSide(0).getLine(1));
 					event.setCancelled(true);
 					event.getBlock().breakNaturally();
 					return;
 				}
 				if((price%1)!=0 && !RealEstate.instance.config.cfgUseDecimalCurrency) //if the price has a decimal number AND Decimal currency is disabled
 				{
-					Messages.sendMessage(player, RealEstate.instance.messages.msgErrorNonIntegerPrice, event.getLine(1));
+					Messages.sendMessage(player, RealEstate.instance.messages.msgErrorNonIntegerPrice, event.getSide(0).getLine(1));
 					event.setCancelled(true);
 					event.getBlock().breakNaturally();
 					return;
 				}
 
-				if(event.getLine(2).isEmpty())
+				if(event.getSide(0).getLine(2).isEmpty())
 				{
-					event.setLine(2, "" + RealEstate.instance.config.cfgLeasePayments);
+					event.getSide(0).setLine(2, "" + RealEstate.instance.config.cfgLeasePayments);
 				}
 				int paymentsCount;
 				try
 				{
-					paymentsCount = Integer.parseInt(event.getLine(2));
+					paymentsCount = Integer.parseInt(event.getSide(0).getLine(2));
 				}
 				catch(Exception e)
 				{
-					Messages.sendMessage(player, RealEstate.instance.messages.msgErrorInvalidNumber, event.getLine(2));
+					Messages.sendMessage(player, RealEstate.instance.messages.msgErrorInvalidNumber, event.getSide(0).getLine(2));
 					event.setCancelled(true);
 					event.getBlock().breakNaturally();
 					return;
 				}
 
-				if(event.getLine(3).isEmpty())
+				if(event.getSide(0).getLine(3).isEmpty())
 				{
-					event.setLine(3, RealEstate.instance.config.cfgLeaseTime);
+					event.getSide(0).setLine(3, RealEstate.instance.config.cfgLeaseTime);
 				}
-				int frequency = parseDuration(event.getLine(3));
+				int frequency = parseDuration(event.getSide(0).getLine(3));
 				if(frequency == 0)
 				{
-					Messages.sendMessage(player, RealEstate.instance.messages.msgErrorInvalidDuration, event.getLine(3),
+					Messages.sendMessage(player, RealEstate.instance.messages.msgErrorInvalidDuration, event.getSide(0).getLine(3),
 						"10 weeks",
 						"3 days",
 						"1 week 3 days");
@@ -385,11 +385,11 @@ public class REListener implements Listener
 
 	private double getDouble(SignChangeEvent event, int line, double defaultValue) throws NumberFormatException
 	{
-		if(event.getLine(line).isEmpty())// if no price precised, make it the default one
+		if(event.getSide(0).getLine(line).isEmpty())// if no price precised, make it the default one
 		{
-			event.setLine(line, Double.toString(defaultValue));
+			event.getSide(0).setLine(line, Double.toString(defaultValue));
 		}
-		return Double.parseDouble(event.getLine(line));
+		return Double.parseDouble(event.getSide(0).getLine(line));
 	}
 
 	@EventHandler
@@ -399,9 +399,9 @@ public class REListener implements Listener
 				event.getClickedBlock().getState() instanceof Sign)
 		{
 			Sign sign = (Sign)event.getClickedBlock().getState();
-			RealEstate.instance.log.info(sign.getLine(0));
+			RealEstate.instance.log.info(sign.getSide(0).getLine(0));
 			// it is a real estate sign
-			if(ChatColor.stripColor(sign.getLine(0)).equalsIgnoreCase(ChatColor.stripColor(
+			if(ChatColor.stripColor(sign.getSide(0).getLine(0)).equalsIgnoreCase(ChatColor.stripColor(
 				Messages.getMessage(RealEstate.instance.config.cfgSignsHeader, false))))
 			{
 				Player player = event.getPlayer();

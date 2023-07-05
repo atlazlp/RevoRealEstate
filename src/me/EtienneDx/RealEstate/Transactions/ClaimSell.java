@@ -38,29 +38,29 @@ public class ClaimSell extends ClaimTransaction
 		if(sign.getBlock().getState() instanceof Sign)
 		{
 			Sign s = (Sign) sign.getBlock().getState();
-			s.setLine(0, Messages.getMessage(RealEstate.instance.config.cfgSignsHeader, false));
-			s.setLine(1, ChatColor.DARK_GREEN + RealEstate.instance.config.cfgReplaceSell);
-			s.setLine(2, owner != null ? Utils.getSignString(Bukkit.getOfflinePlayer(owner).getName()) : "SERVER");
+			s.getSide(0).setLine(0, Messages.getMessage(RealEstate.instance.config.cfgSignsHeader, false));
+			s.getSide(0).setLine(1, ChatColor.DARK_GREEN + RealEstate.instance.config.cfgReplaceSell);
+			s.getSide(0).setLine(2, owner != null ? Utils.getSignString(Bukkit.getOfflinePlayer(owner).getName()) : "SERVER");
 			if(RealEstate.instance.config.cfgUseCurrencySymbol)
 			{
 				if(RealEstate.instance.config.cfgUseDecimalCurrency == false)
 				{
-					s.setLine(3, RealEstate.instance.config.cfgCurrencySymbol + " " + (int)Math.round(price));
+					s.getSide(0).setLine(3, RealEstate.instance.config.cfgCurrencySymbol + " " + (int)Math.round(price));
 				}
 				else
 				{
-					s.setLine(3, RealEstate.instance.config.cfgCurrencySymbol + " " + price);
+					s.getSide(0).setLine(3, RealEstate.instance.config.cfgCurrencySymbol + " " + price);
 				}
 			}
 			else
 			{
 				if(RealEstate.instance.config.cfgUseDecimalCurrency == false)
 				{
-					s.setLine(3, (int)Math.round(price) + " " + RealEstate.econ.currencyNamePlural());
+					s.getSide(0).setLine(3, (int)Math.round(price) + " " + RealEstate.econ.currencyNamePlural());
 				}
 				else
 				{
-					s.setLine(3, price + " " + RealEstate.econ.currencyNamePlural());
+					s.getSide(0).setLine(3, price + " " + RealEstate.econ.currencyNamePlural());
 				}
 			}
 			s.update(true);

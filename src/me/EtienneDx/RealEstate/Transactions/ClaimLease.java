@@ -66,33 +66,33 @@ public class ClaimLease extends BoughtTransaction
 			if(sign.getBlock().getState() instanceof Sign)
 			{
 				Sign s = (Sign)sign.getBlock().getState();
-				s.setLine(0, Messages.getMessage(RealEstate.instance.config.cfgSignsHeader, false));
-				s.setLine(1, ChatColor.DARK_GREEN + RealEstate.instance.config.cfgReplaceLease);
-				//s.setLine(2, owner != null ? Bukkit.getOfflinePlayer(owner).getName() : "SERVER");
-				//s.setLine(2, paymentsLeft + "x " + price + " " + RealEstate.econ.currencyNamePlural());
+				s.getSide(0).setLine(0, Messages.getMessage(RealEstate.instance.config.cfgSignsHeader, false));
+				s.getSide(0).setLine(1, ChatColor.DARK_GREEN + RealEstate.instance.config.cfgReplaceLease);
+				//s.getSide(0).setLine(2, owner != null ? Bukkit.getOfflinePlayer(owner).getName() : "SERVER");
+				//s.getSide(0).setLine(2, paymentsLeft + "x " + price + " " + RealEstate.econ.currencyNamePlural());
 				if(RealEstate.instance.config.cfgUseCurrencySymbol)
 				{
 					if(RealEstate.instance.config.cfgUseDecimalCurrency == false)
 					{
-						s.setLine(2, paymentsLeft + "x " + RealEstate.instance.config.cfgCurrencySymbol + " " + (int)Math.round(price));
+						s.getSide(0).setLine(2, paymentsLeft + "x " + RealEstate.instance.config.cfgCurrencySymbol + " " + (int)Math.round(price));
 					}
 					else
 					{
-						s.setLine(2, paymentsLeft + "x " + RealEstate.instance.config.cfgCurrencySymbol + " " + price);
+						s.getSide(0).setLine(2, paymentsLeft + "x " + RealEstate.instance.config.cfgCurrencySymbol + " " + price);
 					}
 				}
 				else
 				{
 					if(RealEstate.instance.config.cfgUseDecimalCurrency == false)
 					{
-						s.setLine(2, paymentsLeft + "x " + (int)Math.round(price) + " " + RealEstate.econ.currencyNamePlural());
+						s.getSide(0).setLine(2, paymentsLeft + "x " + (int)Math.round(price) + " " + RealEstate.econ.currencyNamePlural());
 					}
 					else
 					{
-						s.setLine(2, paymentsLeft + "x " + price + " " + RealEstate.econ.currencyNamePlural());
+						s.getSide(0).setLine(2, paymentsLeft + "x " + price + " " + RealEstate.econ.currencyNamePlural());
 					}
 				}
-				s.setLine(3, Utils.getTime(frequency, null, false));
+				s.getSide(0).setLine(3, Utils.getTime(frequency, null, false));
 				s.update(true);
 			}
 			else
