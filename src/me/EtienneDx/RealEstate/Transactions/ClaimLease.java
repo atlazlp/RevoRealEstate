@@ -54,7 +54,7 @@ public class ClaimLease extends BoughtTransaction
 			map.put("lastPayment", lastPayment.format(DateTimeFormatter.ISO_DATE_TIME));
 		map.put("frequency", frequency);
 		map.put("paymentsLeft", paymentsLeft);
-		
+
 		return map;
 	}
 	
